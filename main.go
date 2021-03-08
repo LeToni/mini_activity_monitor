@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"github.com/getlantern/systray"
 	"log"
 	"math"
+	"strconv"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
@@ -11,8 +12,39 @@ import (
 )
 
 func main() {
-	fmt.Println(getCpuUsage())
-	fmt.Println(getMemoryUsage())
+	systray.Run(onReady, onExit)
+}
+
+func onReady() {
+	go func() {
+		var result string
+		for {
+			result = getData()
+			systray.SetTitle(result)
+		}
+	}()
+
+	go func() {
+		mQuit := systray.AddMenuItem("Quit", "Quit the whole app")
+
+		for {
+			select {
+			case <-mQuit.ClickedCh:
+				systray.Quit()
+				return
+			}
+		}
+	}()
+}
+
+func getData() string {
+	cpuUsage := "CPU: " + strconv.Itoa(getCpuUsage()) + "% "
+	memoryUsage := "Mem: " + strconv.Itoa(getMemoryUsage()) + "% "
+	return cpuUsage + memoryUsage
+}
+
+func onExit() {
+	// clean up here
 }
 
 func getCpuUsage() int {
