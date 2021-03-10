@@ -3,7 +3,7 @@ CPU and Memory usage monitoring tool for OS Mac menu bar
 
 ### Screenshot Version 0.1.0
 
-![Screenshot](images/img1.png)
+![Screenshot](images/screenshot_v0_1_0.png)
 
 ## Install
 
